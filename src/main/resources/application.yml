@@ -1,0 +1,3 @@
+mySqlRoot : jdbc:mysql://localhost/hotelRest
+mySqlUserName : root
+mySqlPassword :
