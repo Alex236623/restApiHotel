@@ -1,30 +1,29 @@
 package com.hotel.domain;
 
+import lombok.*;
 import jakarta.persistence.*;
-
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+@Data
+@Table
 @Entity
-@Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column
     private LocalDate startDate;
-
+    @Column
     private LocalDate endDate;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
     private Room room;
-
     @OneToMany(mappedBy = "reservation")
     private List<Guest> guests = new ArrayList<>();
-
-
 }

@@ -1,14 +1,7 @@
 package com.hotel.repository;
 
 import com.hotel.domain.Room;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-public interface RoomRepository  {
-    public List<Map<String, Object>> findAll();
-    public Optional<Object> findById(Long id);
-    public Room save(Room room);
-    public void delete(Room room);
+public interface RoomRepository extends JpaRepository<Room, Long> {
 }

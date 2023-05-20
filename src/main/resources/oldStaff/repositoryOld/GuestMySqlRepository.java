@@ -1,4 +1,5 @@
-package com.hotel.repository;
+/*
+package repositoryOld;
 
 import com.hotel.domain.Guest;
 import org.springframework.stereotype.Repository;
@@ -29,3 +30,4 @@ public class GuestMySqlRepository implements GuestRepository {
 
     }
 }
+*/

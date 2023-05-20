@@ -1,9 +1,10 @@
 package com.hotel.controller;
 
 import com.hotel.domain.Guest;
+import com.hotel.dto.GuestDto;
 import com.hotel.service.GuestService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -14,12 +15,12 @@ public class GuestController {
     private GuestService guestService;
 
     @GetMapping
-    public List<Guest> getAllGuests() {
-        return guestService.getAllGuests();
+    public List<GuestDto> findAll() {
+        return guestService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Guest getGuestById(@PathVariable Long id) {
+    public GuestDto findById(@PathVariable Long id) {
         return guestService.getGuestById(id);
     }
 

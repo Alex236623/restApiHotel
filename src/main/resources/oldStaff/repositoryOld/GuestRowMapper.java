@@ -1,4 +1,5 @@
-package com.hotel.repository;
+/*
+package repositoryOld;
 
 import com.hotel.domain.Guest;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,3 +22,4 @@ public class GuestRowMapper implements RowMapper<Guest> {
         return null;
     }
 }
+*/

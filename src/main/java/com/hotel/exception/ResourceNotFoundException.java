@@ -1,5 +1,4 @@
-package com.hotel.service;
-
+package com.hotel.exception;
 public class ResourceNotFoundException extends RuntimeException {
     private String resourceName;
     private String fieldName;

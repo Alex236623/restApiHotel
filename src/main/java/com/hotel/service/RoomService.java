@@ -1,27 +1,62 @@
 package com.hotel.service;
 
 import com.hotel.domain.Room;
-import com.hotel.repository.RoomMySqlRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hotel.dto.RoomDto;
+import com.hotel.domain.Reservation;
+import com.hotel.repository.RoomRepository;
+import com.hotel.exception.ResourceNotFoundException;
+
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
     @Autowired
-    private RoomMySqlRepository roomRepository;
+    private RoomRepository roomRepository;
 
-    public RoomService() {
+    public RoomService(RoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
     }
 
-    public List<Map<String, Object>> getAllRooms() {
-        return roomRepository.findAll();
+    public List<RoomDto> findAll() {
+        return roomRepository.findAll()
+                .stream()
+                .map(room -> RoomDto.builder()
+                        .id(room.getId())
+                        .price(room.getPrice())
+                        .roomNumber(room.getRoomNumber())
+                        .roomType(room.getRoomType())
+                        .occupancy(room.getOccupancy())
+                        .numberOfBeds(room.getNumberOfBeds())
+                        .reservations(room.getReservations().stream()
+                                .map(Reservation::getId)
+                                .collect(Collectors.toList()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    public Room getRoomById(Long id) {
-        return (Room) roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
+    public RoomDto findById(Long id) {
+        Optional<Room> optionalRoom = roomRepository.findById(id);
+        if (optionalRoom.isPresent()) {
+            Room room = optionalRoom.get();
+            return RoomDto.builder()
+                    .id(room.getId())
+                    .price(room.getPrice())
+                    .roomNumber(room.getRoomNumber())
+                    .roomType(room.getRoomType())
+                    .occupancy(room.getOccupancy())
+                    .numberOfBeds(room.getNumberOfBeds())
+                    .reservations(room.getReservations().stream()
+                            .map(Reservation::getId)
+                            .collect(Collectors.toList()))
+                    .build();
+        } else {
+            throw new ResourceNotFoundException("Room", "id", id);
+        }
     }
 
     public Room addRoom(Room room) {
@@ -29,7 +64,7 @@ public class RoomService {
     }
 
     public Room updateRoom(Long id, Room room) {
-        Room existingRoom = (Room) roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
+        Room existingRoom = roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
         existingRoom.setRoomNumber(room.getRoomNumber());
         existingRoom.setRoomType(room.getRoomType());
         existingRoom.setOccupancy(room.getOccupancy());
@@ -38,7 +73,7 @@ public class RoomService {
     }
 
     public void deleteRoom(Long id) {
-        Room room = (Room) roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
+        Room room = roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
         roomRepository.delete(room);
     }
 }

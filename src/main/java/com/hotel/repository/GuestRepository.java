@@ -1,18 +1,7 @@
 package com.hotel.repository;
 
 import com.hotel.domain.Guest;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface GuestRepository {
-
-  
-    List<Guest> findAll();
-
-    Optional<Object> findById(Long id);
-
-    Guest save(Guest guest);
-
-    void delete(Guest guest);
+public interface GuestRepository extends JpaRepository<Guest, Long> {
 }

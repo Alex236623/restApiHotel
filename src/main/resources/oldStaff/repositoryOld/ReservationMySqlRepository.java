@@ -1,7 +1,8 @@
-package com.hotel.repository;
+/*
+package repositoryOld;
 
 import com.hotel.domain.Reservation;
-import com.hotel.service.ResourceNotFoundException;
+import com.hotel.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,3 +63,4 @@ import java.util.List;
             entityManager.remove(reservation);
         }
     }
+*/

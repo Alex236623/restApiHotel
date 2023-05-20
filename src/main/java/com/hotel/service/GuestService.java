@@ -1,23 +1,52 @@
 package com.hotel.service;
 
 import com.hotel.domain.Guest;
-import com.hotel.repository.GuestMySqlRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hotel.dto.GuestDto;
+import com.hotel.repository.GuestRepository;
 import org.springframework.stereotype.Service;
+import com.hotel.exception.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GuestService {
     @Autowired
-    private GuestMySqlRepository guestRepository;
+    private final GuestRepository guestRepository;
 
-    public List<Guest> getAllGuests() {
-        return guestRepository.findAll();
+    public GuestService(GuestRepository guestRepository) {
+        this.guestRepository = guestRepository;
     }
 
-    public Guest getGuestById(Long id) {
-        return (Guest) guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
+    public List<GuestDto> findAll() {
+        return guestRepository.findAll()
+                .stream()
+                .map(guest -> GuestDto.builder()
+                        .id(guest.getId())
+                        .firstName(guest.getFirstName())
+                        .lastName(guest.getLastName())
+                        .passportNumber(guest.getPassportNumber())
+                        .reservation(guest.getReservation().getId())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public GuestDto getGuestById(Long id) {
+        Optional<Guest> optionalGuest = guestRepository.findById(id);
+        if (optionalGuest.isPresent()) {
+            Guest guest = optionalGuest.get();
+            return GuestDto.builder()
+                    .id(guest.getId())
+                    .firstName(guest.getFirstName())
+                    .lastName(guest.getLastName())
+                    .passportNumber(guest.getPassportNumber())
+                    .reservation(guest.getReservation().getId())
+                    .build();
+        } else {
+            throw new ResourceNotFoundException("Guest", "id", id);
+        }
     }
 
     public Guest addGuest(Guest guest) {
@@ -25,7 +54,7 @@ public class GuestService {
     }
 
     public Guest updateGuest(Long id, Guest guest) {
-        Guest existingGuest = (Guest) guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
+        Guest existingGuest = guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
         existingGuest.setFirstName(guest.getFirstName());
         existingGuest.setLastName(guest.getLastName());
         existingGuest.setPassportNumber(guest.getPassportNumber());
@@ -33,7 +62,7 @@ public class GuestService {
     }
 
     public void deleteGuest(Long id) {
-        Guest guest = (Guest) guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
+        Guest guest = guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
         guestRepository.delete(guest);
     }
 }

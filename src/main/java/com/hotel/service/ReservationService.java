@@ -1,23 +1,54 @@
 package com.hotel.service;
 
+import com.hotel.domain.Guest;
 import com.hotel.domain.Reservation;
-import com.hotel.repository.ReservationMySqlRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hotel.dto.ReservationDto;
+import com.hotel.repository.ReservationRepository;
+import com.hotel.exception.ResourceNotFoundException;
+
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
     @Autowired
-    private ReservationMySqlRepository reservationRepository;
+    private ReservationRepository reservationRepository;
 
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<ReservationDto> getAllReservations() {
+        return reservationRepository.findAll()
+                .stream()
+                .map(reservation -> ReservationDto.builder()
+                        .id(reservation.getId())
+                        .startDate(reservation.getStartDate())
+                        .endDate(reservation.getEndDate())
+                        .room(reservation.getRoom().getRoomNumber())
+                        .guests(reservation.getGuests().stream()
+                                .map(Guest::guestShortCard)
+                                .collect(Collectors.toList()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    public Reservation getReservationById(Long id) {
-        return (Reservation) reservationRepository.findById(id);//.orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
+    public ReservationDto getReservationById(Long id) {
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+        if (optionalReservation.isPresent()) {
+            Reservation reservation = optionalReservation.get();
+            return ReservationDto.builder()
+                    .id(reservation.getId())
+                    .startDate(reservation.getStartDate())
+                    .endDate(reservation.getEndDate())
+                    .room(reservation.getRoom().getRoomNumber())
+                    .guests(reservation.getGuests().stream()
+                            .map(Guest::guestShortCard)
+                            .collect(Collectors.toList()))
+                    .build();
+        } else {
+            throw new ResourceNotFoundException("Reservation", "id", id);
+        }
     }
 
     public Reservation addReservation(Reservation reservation) {
@@ -25,7 +56,7 @@ public class ReservationService {
     }
 
     public Reservation updateReservation(Long id, Reservation reservation) {
-        Reservation existingReservation = (Reservation) reservationRepository.findById(id);//.orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
+        Reservation existingReservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
         existingReservation.setStartDate(reservation.getStartDate());
         existingReservation.setEndDate(reservation.getEndDate());
         existingReservation.setRoom(reservation.getRoom());
@@ -33,7 +64,7 @@ public class ReservationService {
     }
 
     public void deleteReservation(Long id) {
-        Reservation reservation = (Reservation) reservationRepository.findById(id);//.orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
         reservationRepository.delete(reservation);
     }
 }

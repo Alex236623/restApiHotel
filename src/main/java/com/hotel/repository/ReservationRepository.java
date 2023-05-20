@@ -1,16 +1,7 @@
 package com.hotel.repository;
 
 import com.hotel.domain.Reservation;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-
-@Repository
-public interface ReservationRepository {
-    List<Reservation> findAll();
-    Reservation findById(Long id);
-    Reservation save(Reservation reservation);
-    public Reservation update(Long id, Reservation reservationDetails);
-    void delete(Reservation reservation);
+public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 }

@@ -1,4 +1,5 @@
-package com.hotel.repository;
+/*
+package repositoryOld;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,4 +22,4 @@ public class RoomRowMapper implements RowMapper<Room> {
 
         return room;
     }
-}
+}*/

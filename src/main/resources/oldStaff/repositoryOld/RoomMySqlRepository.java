@@ -1,4 +1,5 @@
-package com.hotel.repository;
+/*
+package repositoryOld;
 
 import com.hotel.domain.Room;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,3 +51,4 @@ public class RoomMySqlRepository implements RoomRepository {
         jdbcTemplate.update(sql, room.getId());
     }
 }
+*/
