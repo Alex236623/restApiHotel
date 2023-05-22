@@ -49,6 +49,37 @@ public class GuestService {
         }
     }
 
+
+    public GuestDto getGuestByFirstName(String firstName) {
+        Optional<Guest> optionalGuest = guestRepository.findByFirstName(firstName);
+        if (optionalGuest.isPresent()) {
+            Guest guest = optionalGuest.get();
+            return GuestDto.builder()
+                    .id(guest.getId())
+                    .firstName(guest.getFirstName())
+                    .lastName(guest.getLastName())
+                    .passportNumber(guest.getPassportNumber())
+                    .reservation(guest.getReservation().getId())
+                    .build();
+        } else {
+            throw new ResourceNotFoundException("Guest", "firstName", firstName);
+        }
+    }
+    public GuestDto getGuestByPassport(String passport) {
+        Optional<Guest> optionalGuest = guestRepository.findByPassportNumber(passport);
+        if (optionalGuest.isPresent()) {
+            Guest guest = optionalGuest.get();
+            return GuestDto.builder()
+                    .id(guest.getId())
+                    .firstName(guest.getFirstName())
+                    .lastName(guest.getLastName())
+                    .passportNumber(guest.getPassportNumber())
+                    .reservation(guest.getReservation().getId())
+                    .build();
+        } else {
+            throw new ResourceNotFoundException("Guest", "passport", passport);
+        }
+    }
     public Guest addGuest(Guest guest) {
         return guestRepository.save(guest);
     }
@@ -64,5 +95,11 @@ public class GuestService {
     public void deleteGuest(Long id) {
         Guest guest = guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
         guestRepository.delete(guest);
+    }
+
+
+
+    public GuestDto moveGuestToRoom(Long guestId, Long roomId) {
+        return null;
     }
 }

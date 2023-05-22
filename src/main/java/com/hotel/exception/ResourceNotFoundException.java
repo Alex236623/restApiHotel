@@ -1,5 +1,8 @@
 package com.hotel.exception;
+
+
 public class ResourceNotFoundException extends RuntimeException {
+
     private String resourceName;
     private String fieldName;
     private Object fieldValue;
@@ -9,6 +12,7 @@ public class ResourceNotFoundException extends RuntimeException {
         this.resourceName = resourceName;
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
+
     }
 
     public String getResourceName() {
