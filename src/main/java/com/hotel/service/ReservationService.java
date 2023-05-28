@@ -25,7 +25,7 @@ public class ReservationService {
                         .id(reservation.getId())
                         .startDate(reservation.getStartDate())
                         .endDate(reservation.getEndDate())
-                        .room(reservation.getRoom().getRoomNumber())
+                        .room(reservation.getRoom())
                         .guests(reservation.getGuests().stream()
                                 .map(Guest::guestShortCard)
                                 .collect(Collectors.toList()))
@@ -41,7 +41,7 @@ public class ReservationService {
                     .id(reservation.getId())
                     .startDate(reservation.getStartDate())
                     .endDate(reservation.getEndDate())
-                    .room(reservation.getRoom().getRoomNumber())
+                    .room(reservation.getRoom())
                     .guests(reservation.getGuests().stream()
                             .map(Guest::guestShortCard)
                             .collect(Collectors.toList()))
@@ -67,4 +67,6 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
         reservationRepository.delete(reservation);
     }
+
+
 }

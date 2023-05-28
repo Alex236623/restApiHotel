@@ -1,6 +1,8 @@
 package com.hotel.exception;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ResourceNotFoundException extends RuntimeException {
 
     private String resourceName;
@@ -12,7 +14,7 @@ public class ResourceNotFoundException extends RuntimeException {
         this.resourceName = resourceName;
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
-
+        log.info(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
     }
 
     public String getResourceName() {

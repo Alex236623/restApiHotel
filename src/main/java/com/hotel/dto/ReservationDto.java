@@ -12,6 +12,6 @@ public class ReservationDto {
     private Long id;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String room;
+    private Long room;
     private List<String> guests;
 }

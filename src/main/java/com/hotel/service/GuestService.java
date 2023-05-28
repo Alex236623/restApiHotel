@@ -1,6 +1,7 @@
 package com.hotel.service;
 
 import com.hotel.domain.Guest;
+import com.hotel.domain.Reservation;
 import com.hotel.dto.GuestDto;
 import com.hotel.repository.GuestRepository;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,9 @@ public class GuestService {
                         .firstName(guest.getFirstName())
                         .lastName(guest.getLastName())
                         .passportNumber(guest.getPassportNumber())
-                        .reservation(guest.getReservation().getId())
+                        .reservation(guest.getReservation().stream()
+                                .map(Reservation::getId)
+                                .collect(Collectors.toList()))
                         .build())
                 .collect(Collectors.toList());
     }
@@ -42,7 +45,9 @@ public class GuestService {
                     .firstName(guest.getFirstName())
                     .lastName(guest.getLastName())
                     .passportNumber(guest.getPassportNumber())
-                    .reservation(guest.getReservation().getId())
+                    .reservation(guest.getReservation().stream()
+                            .map(Reservation::getId)
+                            .collect(Collectors.toList()))
                     .build();
         } else {
             throw new ResourceNotFoundException("Guest", "id", id);
@@ -59,12 +64,16 @@ public class GuestService {
                     .firstName(guest.getFirstName())
                     .lastName(guest.getLastName())
                     .passportNumber(guest.getPassportNumber())
-                    .reservation(guest.getReservation().getId())
+                    .reservation(guest.getReservation().stream()
+                            .map(Reservation::getId)
+                            .collect(Collectors.toList())
+                    )
                     .build();
         } else {
             throw new ResourceNotFoundException("Guest", "firstName", firstName);
         }
     }
+
     public GuestDto getGuestByPassport(String passport) {
         Optional<Guest> optionalGuest = guestRepository.findByPassportNumber(passport);
         if (optionalGuest.isPresent()) {
@@ -74,12 +83,15 @@ public class GuestService {
                     .firstName(guest.getFirstName())
                     .lastName(guest.getLastName())
                     .passportNumber(guest.getPassportNumber())
-                    .reservation(guest.getReservation().getId())
+                    .reservation(guest.getReservation().stream()
+                            .map(Reservation::getId)
+                            .collect(Collectors.toList()))
                     .build();
         } else {
             throw new ResourceNotFoundException("Guest", "passport", passport);
         }
     }
+
     public Guest addGuest(Guest guest) {
         return guestRepository.save(guest);
     }
@@ -98,8 +110,11 @@ public class GuestService {
     }
 
 
-
     public GuestDto moveGuestToRoom(Long guestId, Long roomId) {
         return null;
     }
+
+
+
+
 }

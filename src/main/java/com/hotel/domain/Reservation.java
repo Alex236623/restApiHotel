@@ -21,9 +21,11 @@ public class Reservation {
     private LocalDate startDate;
     @Column
     private LocalDate endDate;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id")
-    private Room room;
-    @OneToMany(mappedBy = "reservation")
+    @Column
+    private Long room;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "GuestReservation",
+            joinColumns = {@JoinColumn(name = "reservation_id")},
+            inverseJoinColumns = {@JoinColumn(name = "guest_id")})
     private List<Guest> guests = new ArrayList<>();
 }

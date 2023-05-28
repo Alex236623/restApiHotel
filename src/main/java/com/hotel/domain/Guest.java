@@ -3,6 +3,8 @@ package com.hotel.domain;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Data
 @Table
 @Entity
@@ -19,9 +21,11 @@ public class Guest {
     private String lastName;
     @Column
     private String passportNumber;
-    @ManyToOne
-    @JoinColumn(name = "reservation_id")
-    private Reservation reservation;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "GuestReservation",
+            joinColumns = {@JoinColumn(name = "guest_id")},
+            inverseJoinColumns = {@JoinColumn(name = "reservation_id")})
+    private List<Reservation> reservation;
 
     public String guestShortCard() {
         return this.id + " " + this.getFirstName() + " " + this.getLastName();
