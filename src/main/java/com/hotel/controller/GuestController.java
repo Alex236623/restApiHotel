@@ -39,11 +39,6 @@ public class GuestController {
     }
 
 
-    @PostMapping("/{guestId}/move-to-room/{roomId}")
-    public GuestDto moveGuestToRoom(@PathVariable Long guestId, @PathVariable Long roomId) {
-        return guestService.moveGuestToRoom(guestId, roomId);
-    }
-
     @PostMapping
     public ResponseEntity<Guest> addGuest(@RequestBody Guest guest) {
         return ResponseEntity.ok(guestService.addGuest(guest));

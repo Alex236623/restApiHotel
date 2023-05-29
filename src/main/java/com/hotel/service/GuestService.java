@@ -109,12 +109,4 @@ public class GuestService {
         guestRepository.delete(guest);
     }
 
-
-    public GuestDto moveGuestToRoom(Long guestId, Long roomId) {
-        return null;
-    }
-
-
-
-
 }

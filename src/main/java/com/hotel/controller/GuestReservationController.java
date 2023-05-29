@@ -26,4 +26,8 @@ public class GuestReservationController {
     public GuestReservation addReservation(@RequestBody GuestReservation guestReservation) {
         return guestReservationService.addReservation(guestReservation);
     }
+    @PutMapping("/{id}")
+    public GuestReservation updateReservation(@PathVariable Long id,@RequestBody GuestReservation guestReservation) {
+        return guestReservationService.updateReservation(id,guestReservation);
+    }
 }
