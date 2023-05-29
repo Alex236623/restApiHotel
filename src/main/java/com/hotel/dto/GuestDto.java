@@ -1,6 +1,5 @@
 package com.hotel.dto;
 
-import com.hotel.domain.Reservation;
 import lombok.Data;
 import lombok.Builder;
 

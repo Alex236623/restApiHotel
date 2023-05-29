@@ -1,8 +1,8 @@
 package com.hotel.service;
 
+import com.hotel.dto.GuestDto;
 import com.hotel.domain.Guest;
 import com.hotel.domain.Reservation;
-import com.hotel.dto.GuestDto;
 import com.hotel.repository.GuestRepository;
 import org.springframework.stereotype.Service;
 import com.hotel.exception.ResourceNotFoundException;
@@ -95,7 +95,6 @@ public class GuestService {
     public Guest addGuest(Guest guest) {
         return guestRepository.save(guest);
     }
-
     public Guest updateGuest(Long id, Guest guest) {
         Guest existingGuest = guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
         existingGuest.setFirstName(guest.getFirstName());
@@ -103,10 +102,8 @@ public class GuestService {
         existingGuest.setPassportNumber(guest.getPassportNumber());
         return guestRepository.save(existingGuest);
     }
-
     public void deleteGuest(Long id) {
         Guest guest = guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
         guestRepository.delete(guest);
     }
-
 }
