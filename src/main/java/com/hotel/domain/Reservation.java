@@ -21,8 +21,8 @@ public class Reservation {
     private LocalDate startDate;
     @Column
     private LocalDate endDate;
-    @Column
-    private Long room;
+    @ManyToOne
+    private Room room;
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "GuestReservation",
             joinColumns = {@JoinColumn(name = "reservation_id")},

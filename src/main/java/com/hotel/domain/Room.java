@@ -20,7 +20,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private int price;
+    private Long price;
     @Column
     private String roomNumber;
     @Column
@@ -28,7 +28,7 @@ public class Room {
     @Column
     private String occupancy;
     @Column
-    private int numberOfBeds;
+    private Long numberOfBeds;
     @OneToMany(mappedBy = "room")
     private List<Reservation> reservations = new ArrayList<>();
 }

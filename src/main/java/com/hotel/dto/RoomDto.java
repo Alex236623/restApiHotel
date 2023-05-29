@@ -9,10 +9,10 @@ import java.util.List;
 @Builder
 public class RoomDto {
     private Long id;
-    private int price;
+    private Long price;
     private String roomNumber;
     private String roomType;
     private String occupancy;
-    private int numberOfBeds;
+    private Long numberOfBeds;
     private List<Long> reservations;
 }

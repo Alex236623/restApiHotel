@@ -4,6 +4,7 @@ import com.hotel.dto.GuestDto;
 import com.hotel.domain.Guest;
 import com.hotel.domain.Reservation;
 import com.hotel.repository.GuestRepository;
+import com.hotel.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 import com.hotel.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import java.util.stream.Collectors;
 public class GuestService {
     @Autowired
     private final GuestRepository guestRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
+
 
     public GuestService(GuestRepository guestRepository) {
         this.guestRepository = guestRepository;
@@ -24,15 +28,7 @@ public class GuestService {
     public List<GuestDto> findAll() {
         return guestRepository.findAll()
                 .stream()
-                .map(guest -> GuestDto.builder()
-                        .id(guest.getId())
-                        .firstName(guest.getFirstName())
-                        .lastName(guest.getLastName())
-                        .passportNumber(guest.getPassportNumber())
-                        .reservation(guest.getReservation().stream()
-                                .map(Reservation::getId)
-                                .collect(Collectors.toList()))
-                        .build())
+                .map(this::convertToGuestDto)
                 .collect(Collectors.toList());
     }
 
@@ -40,15 +36,7 @@ public class GuestService {
         Optional<Guest> optionalGuest = guestRepository.findById(id);
         if (optionalGuest.isPresent()) {
             Guest guest = optionalGuest.get();
-            return GuestDto.builder()
-                    .id(guest.getId())
-                    .firstName(guest.getFirstName())
-                    .lastName(guest.getLastName())
-                    .passportNumber(guest.getPassportNumber())
-                    .reservation(guest.getReservation().stream()
-                            .map(Reservation::getId)
-                            .collect(Collectors.toList()))
-                    .build();
+            return convertToGuestDto(guest);
         } else {
             throw new ResourceNotFoundException("Guest", "id", id);
         }
@@ -59,16 +47,7 @@ public class GuestService {
         Optional<Guest> optionalGuest = guestRepository.findByFirstName(firstName);
         if (optionalGuest.isPresent()) {
             Guest guest = optionalGuest.get();
-            return GuestDto.builder()
-                    .id(guest.getId())
-                    .firstName(guest.getFirstName())
-                    .lastName(guest.getLastName())
-                    .passportNumber(guest.getPassportNumber())
-                    .reservation(guest.getReservation().stream()
-                            .map(Reservation::getId)
-                            .collect(Collectors.toList())
-                    )
-                    .build();
+            return convertToGuestDto(guest);
         } else {
             throw new ResourceNotFoundException("Guest", "firstName", firstName);
         }
@@ -78,32 +57,56 @@ public class GuestService {
         Optional<Guest> optionalGuest = guestRepository.findByPassportNumber(passport);
         if (optionalGuest.isPresent()) {
             Guest guest = optionalGuest.get();
-            return GuestDto.builder()
-                    .id(guest.getId())
-                    .firstName(guest.getFirstName())
-                    .lastName(guest.getLastName())
-                    .passportNumber(guest.getPassportNumber())
-                    .reservation(guest.getReservation().stream()
-                            .map(Reservation::getId)
-                            .collect(Collectors.toList()))
-                    .build();
+            return convertToGuestDto(guest);
         } else {
             throw new ResourceNotFoundException("Guest", "passport", passport);
         }
     }
 
-    public Guest addGuest(Guest guest) {
-        return guestRepository.save(guest);
+    public Guest saveGuest(Guest guest) {
+        Guest savedGuest = guestRepository.save(guest);
+
+        // Оновити зв'язок між гостем і бронюваннями
+        for (Reservation reservation : guest.getReservation()) {
+            reservation.getGuests().add(savedGuest);
+        }
+
+        // Зберегти оновлені бронювання в базі даних
+        for (Reservation reservation : guest.getReservation()) {
+            reservationRepository.save(reservation);
+        }
+
+        return savedGuest;
     }
-    public Guest updateGuest(Long id, Guest guest) {
-        Guest existingGuest = guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
-        existingGuest.setFirstName(guest.getFirstName());
-        existingGuest.setLastName(guest.getLastName());
-        existingGuest.setPassportNumber(guest.getPassportNumber());
-        return guestRepository.save(existingGuest);
+
+    public GuestDto updateGuest(Long id, GuestDto updatedGuestDto) {
+        Optional<Guest> optionalGuest = guestRepository.findById(id);
+        if (optionalGuest.isPresent()) {
+            Guest existingGuest = optionalGuest.get();
+            existingGuest.setFirstName(updatedGuestDto.getFirstName());
+            existingGuest.setLastName(updatedGuestDto.getLastName());
+            existingGuest.setPassportNumber(updatedGuestDto.getPassportNumber());
+            Guest updatedGuest = guestRepository.save(existingGuest);
+            return convertToGuestDto(updatedGuest);
+        } else {
+            throw new ResourceNotFoundException("Guest", "id", id);
+        }
     }
+
     public void deleteGuest(Long id) {
         Guest guest = guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
         guestRepository.delete(guest);
+    }
+
+    private GuestDto convertToGuestDto(Guest guest) {
+        return GuestDto.builder()
+                .id(guest.getId())
+                .firstName(guest.getFirstName())
+                .lastName(guest.getLastName())
+                .passportNumber(guest.getPassportNumber())
+                .reservation(guest.getReservation().stream()
+                        .map(Reservation::getId)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

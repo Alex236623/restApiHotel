@@ -4,6 +4,7 @@ import com.hotel.domain.Guest;
 import com.hotel.dto.GuestDto;
 import com.hotel.service.GuestService;
 
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,15 @@ public class GuestController {
 
     @PostMapping
     public ResponseEntity<Guest> addGuest(@RequestBody Guest guest) {
-        return ResponseEntity.ok(guestService.addGuest(guest));
+
+        return new ResponseEntity<>(guestService.saveGuest(guest), HttpStatusCode.valueOf(201));
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Guest> updateGuest(@PathVariable Long id, @RequestBody Guest guest) {
-        return ResponseEntity.ok(guestService.updateGuest(id, guest));
+    public ResponseEntity<GuestDto> updateGuest(@PathVariable Long id, @RequestBody GuestDto guest) {
+        return new ResponseEntity<>(guestService.updateGuest(id, guest), HttpStatusCode.valueOf(201));
+
     }
 
     @DeleteMapping("/{id}")

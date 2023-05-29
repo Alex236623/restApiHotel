@@ -2,9 +2,12 @@ package com.hotel.service;
 
 import com.hotel.domain.Guest;
 import com.hotel.domain.Reservation;
+import com.hotel.domain.Room;
 import com.hotel.dto.ReservationDto;
 import com.hotel.repository.ReservationRepository;
 import com.hotel.exception.ResourceNotFoundException;
+
+import com.hotel.repository.RoomRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +20,13 @@ import java.util.stream.Collectors;
 public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     public List<ReservationDto> getAllReservations() {
         return reservationRepository.findAll()
                 .stream()
-                .map(reservation -> ReservationDto.builder()
-                        .id(reservation.getId())
-                        .startDate(reservation.getStartDate())
-                        .endDate(reservation.getEndDate())
-                        .room(reservation.getRoom())
-                        .guests(reservation.getGuests().stream()
-                                .map(Guest::guestShortCard)
-                                .collect(Collectors.toList()))
-                        .build())
+                .map(this::convertReservationDto)
                 .collect(Collectors.toList());
     }
 
@@ -37,30 +34,40 @@ public class ReservationService {
         Optional<Reservation> optionalReservation = reservationRepository.findById(id);
         if (optionalReservation.isPresent()) {
             Reservation reservation = optionalReservation.get();
-            return ReservationDto.builder()
-                    .id(reservation.getId())
-                    .startDate(reservation.getStartDate())
-                    .endDate(reservation.getEndDate())
-                    .room(reservation.getRoom())
-                    .guests(reservation.getGuests().stream()
-                            .map(Guest::guestShortCard)
-                            .collect(Collectors.toList()))
-                    .build();
+            return convertReservationDto(reservation);
         } else {
             throw new ResourceNotFoundException("Reservation", "id", id);
         }
     }
 
     public Reservation addReservation(Reservation reservation) {
+        Room room = Room.builder()
+                .id(reservation.getRoom().getId())
+                .price(reservation.getRoom().getPrice())
+                .roomNumber(reservation.getRoom().getRoomNumber())
+                .roomType(reservation.getRoom().getRoomType())
+                .occupancy(reservation.getRoom().getOccupancy())
+                .numberOfBeds(reservation.getRoom().getNumberOfBeds())
+                .build();
+        room = roomRepository.save(room);
+        reservation.setRoom(room);
         return reservationRepository.save(reservation);
     }
 
-    public Reservation updateReservation(Long id, Reservation reservation) {
-        Reservation existingReservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
-        existingReservation.setStartDate(reservation.getStartDate());
-        existingReservation.setEndDate(reservation.getEndDate());
-        existingReservation.setRoom(reservation.getRoom());
-        return reservationRepository.save(existingReservation);
+    public ReservationDto updateReservation(Long id, ReservationDto updatedReservation) {
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+
+        if (optionalReservation.isPresent()) {
+            Reservation existingReservation = optionalReservation.get();
+            existingReservation.setStartDate(updatedReservation.getStartDate());
+            existingReservation.setEndDate(updatedReservation.getEndDate());
+
+            Reservation reservation = reservationRepository.save(existingReservation);
+            return convertReservationDto(reservation);
+        } else {
+            throw new ResourceNotFoundException("Guest", "id", id);
+        }
+
     }
 
     public void deleteReservation(Long id) {
@@ -68,5 +75,15 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
-
+    private ReservationDto convertReservationDto(Reservation reservation){
+        return ReservationDto.builder()
+                .id(reservation.getId())
+                .startDate(reservation.getStartDate())
+                .endDate(reservation.getEndDate())
+                .room(reservation.getRoom().getId())
+                .guests(reservation.getGuests().stream()
+                        .map(Guest::getFirstName)
+                        .collect(Collectors.toList()))
+                .build();
+    }
 }

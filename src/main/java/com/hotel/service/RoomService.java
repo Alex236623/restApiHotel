@@ -25,17 +25,7 @@ public class RoomService {
     public List<RoomDto> findAll() {
         return roomRepository.findAll()
                 .stream()
-                .map(room -> RoomDto.builder()
-                        .id(room.getId())
-                        .price(room.getPrice())
-                        .roomNumber(room.getRoomNumber())
-                        .roomType(room.getRoomType())
-                        .occupancy(room.getOccupancy())
-                        .numberOfBeds(room.getNumberOfBeds())
-                        .reservations(room.getReservations().stream()
-                                .map(Reservation::getId)
-                                .collect(Collectors.toList()))
-                        .build())
+                .map(this::convertToRoomDto)
                 .collect(Collectors.toList());
     }
 
@@ -43,17 +33,7 @@ public class RoomService {
         Optional<Room> optionalRoom = roomRepository.findById(id);
         if (optionalRoom.isPresent()) {
             Room room = optionalRoom.get();
-            return RoomDto.builder()
-                    .id(room.getId())
-                    .price(room.getPrice())
-                    .roomNumber(room.getRoomNumber())
-                    .roomType(room.getRoomType())
-                    .occupancy(room.getOccupancy())
-                    .numberOfBeds(room.getNumberOfBeds())
-                    .reservations(room.getReservations().stream()
-                            .map(Reservation::getId)
-                            .collect(Collectors.toList()))
-                    .build();
+            return convertToRoomDto(room);
         } else {
             throw new ResourceNotFoundException("Room", "id", id);
         }
@@ -75,5 +55,19 @@ public class RoomService {
     public void deleteRoom(Long id) {
         Room room = roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
         roomRepository.delete(room);
+    }
+
+    private RoomDto convertToRoomDto(Room room) {
+        return RoomDto.builder()
+                .id(room.getId())
+                .price(room.getPrice())
+                .roomNumber(room.getRoomNumber())
+                .roomType(room.getRoomType())
+                .occupancy(room.getOccupancy())
+                .numberOfBeds(room.getNumberOfBeds())
+                .reservations(room.getReservations().stream()
+                        .map(Reservation::getId)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

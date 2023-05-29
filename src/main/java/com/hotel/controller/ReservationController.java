@@ -3,6 +3,9 @@ package com.hotel.controller;
 import com.hotel.domain.Reservation;
 import com.hotel.dto.ReservationDto;
 import com.hotel.service.ReservationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,12 +28,12 @@ public class ReservationController {
     }
 
     @PostMapping
-    public Reservation addReservation(@RequestBody Reservation reservation) {
-        return reservationService.addReservation(reservation);
+    public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation) {
+        return new ResponseEntity<>(reservationService.addReservation(reservation), HttpStatusCode.valueOf(201));
     }
 
     @PutMapping("/{id}")
-    public Reservation updateReservation(@PathVariable Long id, @RequestBody Reservation reservation) {
+    public ReservationDto updateReservation(@PathVariable Long id, @RequestBody ReservationDto reservation) {
         return reservationService.updateReservation(id, reservation);
     }
 
