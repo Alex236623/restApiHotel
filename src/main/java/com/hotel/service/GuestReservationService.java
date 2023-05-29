@@ -30,8 +30,8 @@ public class GuestReservationService {
 
     public GuestReservation updateReservation(Long id,GuestReservation guestReservation) {
         GuestReservation existingGuestReservation = guestReservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
-        existingGuestReservation.setGuest_id(guestReservation.getGuest_id());
-        existingGuestReservation.setReservation_id(guestReservation.getReservation_id());
+        existingGuestReservation.setGuestId(guestReservation.getGuestId());
+        existingGuestReservation.setReservationId(guestReservation.getReservationId());
         return guestReservationRepository.save(guestReservation);
     }
 }

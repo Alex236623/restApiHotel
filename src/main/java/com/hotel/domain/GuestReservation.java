@@ -20,7 +20,7 @@ public class GuestReservation {
     private Long id;
 
     @Column
-    private Long reservation_id;
+    private Long reservationId;
     @Column
-    private Long guest_id;
+    private Long guestId;
 }
