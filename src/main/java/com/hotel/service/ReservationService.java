@@ -75,7 +75,7 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
-    private ReservationDto convertReservationDto(Reservation reservation){
+    private ReservationDto convertReservationDto(Reservation reservation) {
         return ReservationDto.builder()
                 .id(reservation.getId())
                 .startDate(reservation.getStartDate())
@@ -86,4 +86,21 @@ public class ReservationService {
                         .collect(Collectors.toList()))
                 .build();
     }
+
+    public ReservationDto updateReservationRoom(Long id, Long roomId) {
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+        Optional<Room> optionalRoom = roomRepository.findById(roomId);
+
+
+        if (optionalReservation.isPresent() && optionalRoom.isPresent()) {
+            Reservation existingReservation = optionalReservation.get();
+            existingReservation.setRoom(optionalRoom.get());
+            Reservation reservation = reservationRepository.save(existingReservation);
+            return convertReservationDto(reservation);
+        } else {
+            throw new ResourceNotFoundException("Guest", "id", id);
+        }
+
+    }
+
 }
