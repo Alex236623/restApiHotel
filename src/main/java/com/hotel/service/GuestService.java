@@ -1,5 +1,6 @@
 package com.hotel.service;
 
+import com.hotel.domain.Room;
 import com.hotel.dto.GuestDto;
 import com.hotel.domain.Guest;
 import com.hotel.domain.Reservation;
@@ -66,16 +67,18 @@ public class GuestService {
     public Guest saveGuest(Guest guest) {
         Guest savedGuest = guestRepository.save(guest);
 
-        // Оновити зв'язок між гостем і бронюваннями
-        for (Reservation reservation : guest.getReservation()) {
-            reservation.getGuests().add(savedGuest);
-        }
+        if (guest.getReservation() != null) {
 
-        // Зберегти оновлені бронювання в базі даних
-        for (Reservation reservation : guest.getReservation()) {
-            reservationRepository.save(reservation);
-        }
+            // Оновити зв'язок між гостем і бронюваннями
+            /*for (Reservation reservation : guest.getReservation()) {
+                reservation.getGuests().add(savedGuest);
+            }*/
 
+            // Зберегти оновлені бронювання в базі даних
+            for (Reservation reservation : guest.getReservation()) {
+                reservationRepository.save(reservation);
+            }
+        }
         return savedGuest;
     }
 
