@@ -1,13 +1,13 @@
 package com.hotel.service;
 
+import com.hotel.domain.Room;
 import com.hotel.domain.Guest;
 import com.hotel.domain.Reservation;
-import com.hotel.domain.Room;
+
 import com.hotel.dto.ReservationDto;
+import com.hotel.repository.RoomRepository;
 import com.hotel.repository.ReservationRepository;
 import com.hotel.exception.ResourceNotFoundException;
-
-import com.hotel.repository.RoomRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,13 +61,11 @@ public class ReservationService {
             Reservation existingReservation = optionalReservation.get();
             existingReservation.setStartDate(updatedReservation.getStartDate());
             existingReservation.setEndDate(updatedReservation.getEndDate());
-
             Reservation reservation = reservationRepository.save(existingReservation);
             return convertReservationDto(reservation);
         } else {
             throw new ResourceNotFoundException("Guest", "id", id);
         }
-
     }
 
     public void deleteReservation(Long id) {
@@ -90,8 +88,6 @@ public class ReservationService {
     public ReservationDto updateReservationRoom(Long id, Long roomId) {
         Optional<Reservation> optionalReservation = reservationRepository.findById(id);
         Optional<Room> optionalRoom = roomRepository.findById(roomId);
-
-
         if (optionalReservation.isPresent() && optionalRoom.isPresent()) {
             Reservation existingReservation = optionalReservation.get();
             existingReservation.setRoom(optionalRoom.get());
@@ -100,7 +96,5 @@ public class ReservationService {
         } else {
             throw new ResourceNotFoundException("Guest", "id", id);
         }
-
     }
-
 }

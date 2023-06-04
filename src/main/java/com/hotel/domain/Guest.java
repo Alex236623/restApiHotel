@@ -1,6 +1,5 @@
 package com.hotel.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import jakarta.persistence.*;
 
@@ -27,5 +26,4 @@ public class Guest {
             joinColumns = {@JoinColumn(name = "guest_id")},
             inverseJoinColumns = {@JoinColumn(name = "reservation_id")})
     private List<Reservation> reservation;
-
 }

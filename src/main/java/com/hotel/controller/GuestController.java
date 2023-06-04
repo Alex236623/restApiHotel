@@ -39,15 +39,12 @@ public class GuestController {
 
     @PostMapping
     public ResponseEntity<Guest> addGuest(@RequestBody Guest guest) {
-
         return new ResponseEntity<>(guestService.saveGuest(guest), HttpStatusCode.valueOf(201));
-
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<GuestDto> updateGuest(@PathVariable Long id, @RequestBody GuestDto guest) {
         return new ResponseEntity<>(guestService.updateGuest(id, guest), HttpStatusCode.valueOf(201));
-
     }
 
     @DeleteMapping("/{id}")

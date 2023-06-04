@@ -1,13 +1,13 @@
 package com.hotel.service;
 
-import com.hotel.domain.Room;
 import com.hotel.dto.GuestDto;
 import com.hotel.domain.Guest;
 import com.hotel.domain.Reservation;
 import com.hotel.repository.GuestRepository;
 import com.hotel.repository.ReservationRepository;
-import org.springframework.stereotype.Service;
 import com.hotel.exception.ResourceNotFoundException;
+
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -69,12 +69,6 @@ public class GuestService {
 
         if (guest.getReservation() != null) {
 
-            // Оновити зв'язок між гостем і бронюваннями
-            /*for (Reservation reservation : guest.getReservation()) {
-                reservation.getGuests().add(savedGuest);
-            }*/
-
-            // Зберегти оновлені бронювання в базі даних
             for (Reservation reservation : guest.getReservation()) {
                 reservationRepository.save(reservation);
             }

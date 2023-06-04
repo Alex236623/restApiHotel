@@ -3,7 +3,7 @@ package com.hotel.controller;
 import com.hotel.domain.Reservation;
 import com.hotel.dto.ReservationDto;
 import com.hotel.service.ReservationService;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +36,7 @@ public class ReservationController {
     public ReservationDto updateReservation(@PathVariable Long id, @RequestBody ReservationDto reservation) {
         return reservationService.updateReservation(id, reservation);
     }
+
     @PutMapping("/{id}/{roomId}")
     public ReservationDto updateReservation(@PathVariable Long id, @PathVariable Long roomId) {
         return reservationService.updateReservationRoom(id, roomId);
