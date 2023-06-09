@@ -54,7 +54,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": null,\r\n  \"firstName\": \"Alex2\",\r\n  \"lastName\": \"string\",\r\n  \"passportNumber\": \"string\"\r\n}",
+							"raw": "{\r\n  \r\n  \"firstName\": \"Alex2\",\r\n  \"lastName\": \"string\",\r\n  \"passportNumber\": \"string\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -62,13 +62,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/guests/3",
+							"raw": "{{url}}/guests/1",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"guests",
-								"3"
+								"1"
 							]
 						}
 					},
@@ -405,7 +405,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": 0,\r\n  \"startDate\": \"2023-05-29\",\r\n  \"endDate\": \"2023-05-29\",\r\n  \"room\": {\r\n    \"id\": 1,\r\n    \"price\": 0,\r\n    \"roomNumber\": \"string\",\r\n    \"roomType\": \"string\",\r\n    \"occupancy\": \"string\",\r\n    \"numberOfBeds\": 0    \r\n  }\r\n}",
+							"raw": "{\r\n  \r\n  \"startDate\": \"2000-05-29\",\r\n  \"endDate\": \"2000-05-29\",\r\n  \"room\": {\r\n    \"id\": 3\r\n  }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

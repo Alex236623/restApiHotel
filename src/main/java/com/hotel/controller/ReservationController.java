@@ -4,6 +4,7 @@ import com.hotel.domain.Reservation;
 import com.hotel.dto.ReservationDto;
 import com.hotel.service.ReservationService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +34,13 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
-    public ReservationDto updateReservation(@PathVariable Long id, @RequestBody ReservationDto reservation) {
-        return reservationService.updateReservation(id, reservation);
+    public ResponseEntity<ReservationDto> updateReservation(@PathVariable Long id, @RequestBody ReservationDto reservation) {
+        return new ResponseEntity<>(reservationService.updateReservation(id, reservation), HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/{id}/{roomId}")
-    public ReservationDto updateReservation(@PathVariable Long id, @PathVariable Long roomId) {
-        return reservationService.updateReservationRoom(id, roomId);
+    public ResponseEntity<ReservationDto> updateReservation(@PathVariable Long reservationId, @PathVariable Long roomId) {
+        return new ResponseEntity<>(reservationService.updateReservationRoom(reservationId, roomId), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")

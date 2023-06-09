@@ -12,6 +12,7 @@ import com.hotel.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,17 +42,13 @@ public class ReservationService {
     }
 
     public Reservation addReservation(Reservation reservation) {
-        Room room = Room.builder()
-                .id(reservation.getRoom().getId())
-                .price(reservation.getRoom().getPrice())
-                .roomNumber(reservation.getRoom().getRoomNumber())
-                .roomType(reservation.getRoom().getRoomType())
-                .occupancy(reservation.getRoom().getOccupancy())
-                .numberOfBeds(reservation.getRoom().getNumberOfBeds())
-                .build();
-        room = roomRepository.save(room);
-        reservation.setRoom(room);
-        return reservationRepository.save(reservation);
+        if (!reservationRepository.existsByRoomAndStartDateBetweenOrRoomAndEndDateBetween(reservation.getRoom(), reservation.getStartDate(), reservation.getEndDate(), reservation.getRoom(), reservation.getStartDate(), reservation.getEndDate())) {
+            Optional<Room> room = roomRepository.findById(reservation.getRoom().getId());
+            room.ifPresent(value -> value.getReservations().add(reservation));
+            return reservationRepository.save(reservation);
+        } else {
+            throw new RuntimeException("Room is occupied for this days");
+        }
     }
 
     public ReservationDto updateReservation(Long id, ReservationDto updatedReservation) {
@@ -80,13 +77,13 @@ public class ReservationService {
                 .endDate(reservation.getEndDate())
                 .room(reservation.getRoom().getId())
                 .guests(reservation.getGuests().stream()
-                        .map(Guest::getFirstName)
+                        .map(Guest::getId)
                         .collect(Collectors.toList()))
                 .build();
     }
 
-    public ReservationDto updateReservationRoom(Long id, Long roomId) {
-        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+    public ReservationDto updateReservationRoom(Long reservationId, Long roomId) {
+        Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
         Optional<Room> optionalRoom = roomRepository.findById(roomId);
         if (optionalReservation.isPresent() && optionalRoom.isPresent()) {
             Reservation existingReservation = optionalReservation.get();
@@ -94,7 +91,7 @@ public class ReservationService {
             Reservation reservation = reservationRepository.save(existingReservation);
             return convertReservationDto(reservation);
         } else {
-            throw new ResourceNotFoundException("Guest", "id", id);
+            throw new ResourceNotFoundException("Reservation", "id", reservationId);
         }
     }
 }

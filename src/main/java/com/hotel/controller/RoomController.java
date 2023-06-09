@@ -3,6 +3,7 @@ package com.hotel.controller;
 import com.hotel.domain.Room;
 import com.hotel.dto.RoomDto;
 import com.hotel.service.RoomService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +27,13 @@ public class RoomController {
     }
 
     @PostMapping
-    public Room addRoom(@RequestBody Room room) {
-        return roomService.addRoom(room);
+    public ResponseEntity<Room> addRoom(@RequestBody Room room) {
+        return new ResponseEntity<>(roomService.addRoom(room), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public Room updateRoom(@PathVariable Long id, @RequestBody Room room) {
-        return roomService.updateRoom(id, room);
+    public ResponseEntity<RoomDto> updateRoom(@PathVariable Long id, @RequestBody RoomDto room) {
+        return new ResponseEntity<>(roomService.updateRoom(id, room), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")

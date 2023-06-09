@@ -43,13 +43,16 @@ public class RoomService {
         return roomRepository.save(room);
     }
 
-    public Room updateRoom(Long id, Room room) {
+    public RoomDto updateRoom(Long id, RoomDto room) {
         Room existingRoom = roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
+        existingRoom.setPrice(room.getPrice());
         existingRoom.setRoomNumber(room.getRoomNumber());
         existingRoom.setRoomType(room.getRoomType());
         existingRoom.setOccupancy(room.getOccupancy());
-        existingRoom.setPrice(room.getPrice());
-        return roomRepository.save(existingRoom);
+        existingRoom.setNumberOfBeds(room.getNumberOfBeds());
+        existingRoom.setReservations(existingRoom.getReservations());
+        roomRepository.save(existingRoom);
+        return convertToRoomDto(existingRoom);
     }
 
     public void deleteRoom(Long id) {
