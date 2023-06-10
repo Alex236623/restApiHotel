@@ -92,7 +92,7 @@ public class GuestService {
     }
 
     public void deleteGuest(Long id) {
-        Guest guest = guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Guest", "id", id));
+        Guest guest = guestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(GUEST, "id", id));
         guestRepository.delete(guest);
     }
 
