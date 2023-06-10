@@ -5,6 +5,7 @@ import com.hotel.domain.Guest;
 import com.hotel.domain.Reservation;
 
 import com.hotel.dto.ReservationDto;
+import com.hotel.exception.ResourceCanNotBeChangeException;
 import com.hotel.repository.RoomRepository;
 import com.hotel.repository.ReservationRepository;
 import com.hotel.exception.ResourceNotFoundException;
@@ -48,7 +49,7 @@ public class ReservationService {
             room.ifPresent(value -> value.getReservations().add(reservation));
             return reservationRepository.save(reservation);
         } else {
-            throw new RuntimeException("Room is occupied for this days");
+            throw new ResourceCanNotBeChangeException(RESERVATION, "date", reservation);
         }
     }
 
