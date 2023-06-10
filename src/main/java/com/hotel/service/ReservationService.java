@@ -62,7 +62,7 @@ public class ReservationService {
             Reservation reservation = reservationRepository.save(existingReservation);
             return convertReservationDto(reservation);
         } else {
-            throw new ResourceNotFoundException("Guest", "id", id);
+            throw new ResourceNotFoundException(RESERVATION, "id", id);
         }
     }
 
