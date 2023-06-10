@@ -1,23 +1,27 @@
 package com.hotel.controller;
+
 import com.hotel.domain.Room;
 import com.hotel.dto.RoomDto;
 import com.hotel.service.RoomService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+
 import org.mockito.Mock;
+import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
+import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
 
-public class RoomControllerTest {
+class RoomControllerTest {
 
     @Mock
     private RoomService roomService;
@@ -26,20 +30,17 @@ public class RoomControllerTest {
     private RoomController roomController;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testFindAll() {
-        // Arrange
+    void testFindAll() {
         List<RoomDto> expectedRooms = new ArrayList<>();
         when(roomService.findAll()).thenReturn(expectedRooms);
 
-        // Act
         ResponseEntity<List<RoomDto>> response = roomController.findAll();
 
-        // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedRooms, response.getBody());
@@ -47,32 +48,27 @@ public class RoomControllerTest {
     }
 
     @Test
-    public void testGetRoomById() {
-        // Arrange
+    void testGetRoomById() {
         Long roomId = 1L;
         RoomDto expectedRoom = new RoomDto();
         when(roomService.findById(roomId)).thenReturn(expectedRoom);
 
-        // Act
         RoomDto actualRoom = roomController.getRoomById(roomId);
 
-        // Assert
         assertNotNull(actualRoom);
         assertEquals(expectedRoom, actualRoom);
         verify(roomService, times(1)).findById(roomId);
     }
 
     @Test
-    public void testAddRoom() {
-        // Arrange
+    void testAddRoom() {
         Room room = new Room();
         Room savedRoom = new Room();
         when(roomService.addRoom(room)).thenReturn(savedRoom);
 
-        // Act
+
         ResponseEntity<Room> response = roomController.addRoom(room);
 
-        // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(savedRoom, response.getBody());
@@ -80,17 +76,14 @@ public class RoomControllerTest {
     }
 
     @Test
-    public void testUpdateRoom() {
-        // Arrange
+    void testUpdateRoom() {
         Long roomId = 1L;
         RoomDto roomDto = new RoomDto();
         RoomDto updatedRoomDto = new RoomDto();
         when(roomService.updateRoom(roomId, roomDto)).thenReturn(updatedRoomDto);
 
-        // Act
         ResponseEntity<RoomDto> response = roomController.updateRoom(roomId, roomDto);
 
-        // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertEquals(updatedRoomDto, response.getBody());
@@ -98,14 +91,11 @@ public class RoomControllerTest {
     }
 
     @Test
-    public void testDeleteRoom() {
-        // Arrange
+    void testDeleteRoom() {
         Long roomId = 1L;
 
-        // Act
         roomController.deleteRoom(roomId);
 
-        // Assert
         verify(roomService, times(1)).deleteRoom(roomId);
     }
 }

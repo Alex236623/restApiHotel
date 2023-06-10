@@ -1,27 +1,29 @@
 package com.hotel.controller;
 
+import com.hotel.domain.Room;
 import com.hotel.domain.Guest;
 import com.hotel.domain.Reservation;
-import com.hotel.domain.Room;
+
 import com.hotel.dto.GuestDto;
 import com.hotel.service.GuestService;
-import org.junit.jupiter.api.Test;
 
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.Test;
+
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Arrays;
+import java.time.LocalDate;
 
 @WebMvcTest(GuestController.class)
-public class GuestControllerTest {
+class GuestControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -29,7 +31,7 @@ public class GuestControllerTest {
     private GuestService guestService;
 
     @Test
-    public void testFindAllGuests() throws Exception {
+    void testFindAllGuests() throws Exception {
         LocalDate localDate = LocalDate.now();
         Room room = new Room();
         Reservation reservation = new Reservation(1L, localDate, localDate, room, null);
@@ -55,7 +57,7 @@ public class GuestControllerTest {
     }
 
     @Test
-    public void testFindGuestById() throws Exception {
+    void testFindGuestById() throws Exception {
         Long guestId = 1L;
         GuestDto guest = new GuestDto();
         guest.setId(guestId);
@@ -68,7 +70,7 @@ public class GuestControllerTest {
     }
 
     @Test
-    public void testFindGuestByFirstName() throws Exception {
+    void testFindGuestByFirstName() throws Exception {
         String firstName = "John";
         GuestDto guest = new GuestDto();
         guest.setFirstName(firstName);
@@ -81,7 +83,7 @@ public class GuestControllerTest {
     }
 
     @Test
-    public void testFindGuestByPassport() throws Exception {
+    void testFindGuestByPassport() throws Exception {
         String passport = "AB123456";
         GuestDto guest = new GuestDto(1L, "Alex", "Homes", "AB123456", null);
         guest.setPassportNumber(passport);
@@ -93,7 +95,7 @@ public class GuestControllerTest {
     }
 
     @Test
-    public void testAddGuest() throws Exception {
+    void testAddGuest() throws Exception {
         GuestDto guestDto = new GuestDto();
         guestDto.setFirstName("John");
         guestDto.setLastName("Doe");
@@ -115,7 +117,7 @@ public class GuestControllerTest {
     }
 
     @Test
-    public void testUpdateGuest() throws Exception {
+    void testUpdateGuest() throws Exception {
         Long guestId = 1L;
         GuestDto updatedGuestDto = new GuestDto();
         updatedGuestDto.setFirstName("John");
@@ -138,7 +140,7 @@ public class GuestControllerTest {
     }
 
     @Test
-    public void testDeleteGuest() throws Exception {
+    void testDeleteGuest() throws Exception {
         Long guestId = 1L;
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/guests/{id}", guestId))

@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class OpenApiConfig {
+class OpenApiConfig {
     @Bean
-    public OpenAPI usersMicroserviceOpenAPI() {
+    OpenAPI usersMicroserviceOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("Hotel Rest API")
                         .description("REST API")

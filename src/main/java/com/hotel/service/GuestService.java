@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class GuestService {
+    private static final String GUEST = "Guest";
     @Autowired
     private final GuestRepository guestRepository;
     @Autowired
@@ -39,7 +40,7 @@ public class GuestService {
             Guest guest = optionalGuest.get();
             return convertToGuestDto(guest);
         } else {
-            throw new ResourceNotFoundException("Guest", "id", id);
+            throw new ResourceNotFoundException(GUEST, "id", id);
         }
     }
 
@@ -50,7 +51,7 @@ public class GuestService {
             Guest guest = optionalGuest.get();
             return convertToGuestDto(guest);
         } else {
-            throw new ResourceNotFoundException("Guest", "firstName", firstName);
+            throw new ResourceNotFoundException(GUEST, "firstName", firstName);
         }
     }
 
@@ -60,7 +61,7 @@ public class GuestService {
             Guest guest = optionalGuest.get();
             return convertToGuestDto(guest);
         } else {
-            throw new ResourceNotFoundException("Guest", "passport", passport);
+            throw new ResourceNotFoundException(GUEST, "passport", passport);
         }
     }
 
@@ -86,7 +87,7 @@ public class GuestService {
             Guest updatedGuest = guestRepository.save(existingGuest);
             return convertToGuestDto(updatedGuest);
         } else {
-            throw new ResourceNotFoundException("Guest", "id", id);
+            throw new ResourceNotFoundException(GUEST, "id", id);
         }
     }
 

@@ -1,19 +1,17 @@
 package com.hotel.domain;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class GuestTest {
-
-
 
     @BeforeEach
     void setUp() {
@@ -44,6 +42,4 @@ class GuestTest {
         assertEquals(passportNumber, guest.getPassportNumber());
         assertEquals(reservations, guest.getReservation());
     }
-
-
 }

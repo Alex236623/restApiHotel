@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class AuthControllerTests {
+class AuthControllerTests {
 
     @Mock
     private UserService userService;
@@ -29,7 +29,7 @@ public class AuthControllerTests {
     }
 
     @Test
-    public void testSignUp_UsernameTaken() {
+    void testSignUp_UsernameTaken() {
         // Mocking the UserService behavior
         UserDto userDto = new UserDto();
 
@@ -49,7 +49,7 @@ public class AuthControllerTests {
     }
 
     @Test
-    public void testSignUp_SuccessfulRegistration() {
+    void testSignUp_SuccessfulRegistration() {
         // Mocking the UserService behavior
         UserDto userDto = new UserDto();
         userDto.setLogin("username");
@@ -70,7 +70,7 @@ public class AuthControllerTests {
     }
 
     @Test
-    public void testLogin_InvalidCredentials() {
+    void testLogin_InvalidCredentials() {
         // Mocking the UserService behavior
         UserDto userDto = new UserDto();
         userDto.setLogin("username");
@@ -90,7 +90,7 @@ public class AuthControllerTests {
     }
 
     @Test
-    public void testLogin_SuccessfulLogin() {
+    void testLogin_SuccessfulLogin() {
         // Mocking the UserService behavior
         UserDto userDto = new UserDto();
         userDto.setLogin("username");
@@ -111,7 +111,7 @@ public class AuthControllerTests {
         verifyNoMoreInteractions(userService);
     }
     @Test
-    public void testAddGuest() {
+    void testAddGuest() {
         // Mocking the UserService behavior
         Guest guest = new Guest();
         User user = new User();

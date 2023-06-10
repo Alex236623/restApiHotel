@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
+    private static final String RESERVATION = "Guest";
     @Autowired
     private ReservationRepository reservationRepository;
     @Autowired
@@ -37,7 +38,7 @@ public class ReservationService {
             Reservation reservation = optionalReservation.get();
             return convertReservationDto(reservation);
         } else {
-            throw new ResourceNotFoundException("Reservation", "id", id);
+            throw new ResourceNotFoundException(RESERVATION, "id", id);
         }
     }
 
@@ -66,7 +67,7 @@ public class ReservationService {
     }
 
     public void deleteReservation(Long id) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Reservation", "id", id));
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(RESERVATION, "id", id));
         reservationRepository.delete(reservation);
     }
 
@@ -91,7 +92,7 @@ public class ReservationService {
             Reservation reservation = reservationRepository.save(existingReservation);
             return convertReservationDto(reservation);
         } else {
-            throw new ResourceNotFoundException("Reservation", "id", reservationId);
+            throw new ResourceNotFoundException(RESERVATION, "id", reservationId);
         }
     }
 }
