@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ResourceNotFoundException extends RuntimeException {
-    private transient final String resourceName;
-    private transient final String fieldName;
-    private transient final Object fieldValue;
+    private final transient String resourceName;
+    private final transient String fieldName;
+    private final transient Object fieldValue;
 
     public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
         super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
@@ -15,12 +15,15 @@ public class ResourceNotFoundException extends RuntimeException {
         this.fieldValue = fieldValue;
         log.info(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
     }
+
     public String getResourceName() {
         return resourceName;
     }
+
     public String getFieldName() {
         return fieldName;
     }
+
     public Object getFieldValue() {
         return fieldValue;
     }
