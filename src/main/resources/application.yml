@@ -17,3 +17,5 @@ spring:
 springdoc.api-docs.path: /api-docs
 springdoc.swagger-ui.path: /swagger-ui.html
 springdoc.swagger-ui.enabled: true
+
+SONAR_TOKEN:  a6efc9bc8e7e5c5f45bba428f9100c9a8c00aa18
